@@ -4,36 +4,39 @@
 <body>
     <%- include('partials/navbar', { user: user }) %>
 
-    <div class="main-wrapper auth-container">
+    <div class="auth-wrapper">
         <div class="glass-panel auth-box animate__animated animate__zoomIn">
-            <div class="form-header">
-                <h2 class="gradient-text">Join Squad</h2>
-                <p style="color: #94a3b8;">Create your account to get started.</p>
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="font-size: 1.8rem; background: linear-gradient(to right, #fff, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    <%= t.join %>
+                </h2>
+                <p style="color: #64748b; font-size: 0.9rem;"><%= t.subtitle %></p>
             </div>
 
             <form action="/api/auth/register" method="POST">
                 <div class="input-group">
                     <i class="fa-solid fa-user input-icon"></i>
-                    <input type="text" name="name" placeholder="Full Name" required class="input-modern">
+                    <input type="text" name="name" placeholder="<%= t.fullname %>" required class="input-modern">
                 </div>
 
                 <div class="input-group">
                     <i class="fa-solid fa-envelope input-icon"></i>
-                    <input type="email" name="email" placeholder="Email Address" required class="input-modern">
+                    <input type="email" name="email" placeholder="<%= t.email %>" required class="input-modern">
                 </div>
 
                 <div class="input-group">
                     <i class="fa-solid fa-lock input-icon"></i>
-                    <input type="password" name="password" placeholder="Password" required class="input-modern">
+                    <input type="password" name="password" placeholder="<%= t.password %>" required class="input-modern">
                 </div>
 
-                <button type="submit" class="btn-modern" style="width: 100%; padding: 14px;">
-                    Create Account <i class="fa-solid fa-rocket"></i>
+                <button type="submit" class="btn-primary">
+                    <%= t.btn_create %> <i class="fa-solid fa-user-plus" style="margin-left: 5px;"></i>
                 </button>
             </form>
 
-            <div style="text-align: center; margin-top: 20px; color: #94a3b8;">
-                Already have an account? <a href="/login" style="color: var(--secondary);">Login here</a>
+            <div style="text-align: center; margin-top: 20px; font-size: 0.9rem;">
+                <span style="color: #94a3b8;"><%= t.have_account %></span>
+                <a href="<%= link('/login') %>" style="color: var(--secondary); margin-left: 5px;"><%= t.login_here %></a>
             </div>
         </div>
     </div>
@@ -41,13 +44,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <% if (error) { %>
     <script>
-        Toastify({
-            text: "<%= error %>",
-            duration: 3000,
-            gravity: "top",
-            position: "right",
-            style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
-        }).showToast();
+        Toastify({ text: "<%= error %>", duration: 3000, gravity: "top", position: "center", style: { background: "#ef4444" } }).showToast();
     </script>
     <% } %>
 </body>

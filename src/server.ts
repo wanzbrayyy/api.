@@ -8,6 +8,7 @@ import { connectDB } from "./config/database.js";
 import { CONSTANTS } from "./config/constants.js";
 import viewRoutes from "./routes/viewRoutes.js";
 import apiRoutes from "./routes/apiRoutes.js";
+import { detectLanguage } from "./middleware/localeMiddleware.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,9 +24,11 @@ app.use(express.static(path.join(process.cwd(), "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-app.use("/", viewRoutes);
 app.use("/api", apiRoutes);
+app.use(detectLanguage);
+const langRouter = express.Router();
+langRouter.use("/:lang", viewRoutes);
+app.use("/", langRouter);
 
 const server = http.createServer(app);
 

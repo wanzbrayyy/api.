@@ -1,5 +1,5 @@
 <nav class="glass-panel navbar animate__animated animate__fadeInDown">
-    <a href="/" class="nav-brand">
+    <a href="<%= link('/dashboard') %>" class="nav-brand">
         <i class="fa-solid fa-rocket"></i>
         <span>PartyAPI</span>
     </a>
@@ -7,21 +7,29 @@
     <ul class="nav-menu">
         <% if (user) { %>
             <li>
-                <a href="/dashboard" class="nav-link">
+                <a href="<%= link('/dashboard') %>" class="nav-link">
                     <i class="fa-solid fa-gauge-high"></i>
                     <span>Dash</span>
                 </a>
             </li>
-            <!-- TOMBOL BARS BARU -->
             <li>
-                <a href="/bars" class="nav-link" style="color: #facc15;">
+                <a href="<%= link('/bars') %>" class="nav-link" style="color: #facc15;">
                     <i class="fa-solid fa-layer-group"></i>
                     <span>Bars</span>
                 </a>
             </li>
-            <!-- END TOMBOL BARS -->
+            
+            <!-- LANGUAGE BUTTON -->
             <li>
-                <a href="/profile" class="nav-link">
+                <button onclick="toggleLangModal()" class="lang-btn">
+                    <i class="fa-solid fa-earth-americas"></i> 
+                    <span style="text-transform: uppercase;"><%= currentLang %></span>
+                </button>
+            </li>
+            <!-- END LANGUAGE -->
+
+            <li>
+                <a href="<%= link('/profile') %>" class="nav-link">
                     <i class="fa-regular fa-user"></i>
                     <span>Profile</span>
                 </a>
@@ -33,13 +41,19 @@
             </li>
         <% } else { %>
             <li>
-                <a href="/login" class="nav-link">
+                <button onclick="toggleLangModal()" class="lang-btn" style="margin-right: 10px;">
+                    <i class="fa-solid fa-earth-americas"></i> 
+                    <%= currentLang.toUpperCase() %>
+                </button>
+            </li>
+            <li>
+                <a href="<%= link('/login') %>" class="nav-link">
                     <i class="fa-solid fa-right-to-bracket"></i>
                     <span>Login</span>
                 </a>
             </li>
             <li>
-                <a href="/register" class="nav-link" style="color: var(--secondary);">
+                <a href="<%= link('/register') %>" class="nav-link" style="color: var(--secondary);">
                     <i class="fa-solid fa-user-plus"></i>
                     <span>Join</span>
                 </a>
@@ -47,3 +61,5 @@
         <% } %>
     </ul>
 </nav>
+
+<%- include('language_modal') %>

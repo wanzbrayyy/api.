@@ -4,36 +4,68 @@
 <body>
     <%- include('../partials/navbar', { user: user }) %>
     <div class="main-wrapper container animate__animated animate__fadeIn">
-        <div class="glass-panel" style="max-width: 500px; margin: 0 auto; padding: 30px;">
-            <h2 style="text-align: center; color: #3b82f6;"><i class="fa-solid fa-mobile-screen-button"></i> ML Stalk</h2>
-            
-            <div style="display: flex; gap: 10px;">
-                <input type="text" id="id" class="input-modern" placeholder="User ID" style="flex: 2;">
-                <input type="text" id="zone" class="input-modern" placeholder="Zone ID" style="flex: 1;">
+        <div class="glass-panel" style="max-width: 800px; margin: 0 auto; padding: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0; color: #3b82f6;"><i class="fa-solid fa-mobile-screen-button"></i> ML API Tester</h2>
+                <span class="status-badge" id="statusCode">READY</span>
             </div>
-            <button onclick="stalkML()" class="btn-modern" style="width: 100%; margin-top: 10px; background: #3b82f6;">Check</button>
 
-            <div id="result" style="margin-top: 20px; display: none; text-align: center;">
-                <h3>Result: <span id="resNick" style="color: #3b82f6;"></span></h3>
+            <div class="input-group">
+                <span style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 5px; display: block;">Endpoint: POST /api/tools/ml</span>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="id" class="input-modern" placeholder="User ID" style="flex: 2;">
+                    <input type="text" id="zone" class="input-modern" placeholder="Zone ID" style="flex: 1;">
+                </div>
+            </div>
+            
+            <button onclick="fetchApi()" class="btn-modern" style="width: 100%; margin-top: 15px; background: #3b82f6;">POST Request</button>
+
+            <div class="response-container" style="margin-top: 30px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <strong style="color: #cbd5e1;">Response Body (JSON)</strong>
+                    <button onclick="copyJson()" style="background: none; border: none; color: #3b82f6; cursor: pointer;">Copy</button>
+                </div>
+                <pre id="jsonOutput" style="background: #0f172a; padding: 20px; border-radius: 10px; overflow-x: auto; color: #a5b4fc; margin-top: 10px; font-family: monospace;">// Waiting...</pre>
             </div>
         </div>
     </div>
+
     <script>
-        async function stalkML() {
+        const userApiKey = "<%= user.apiKey || '' %>";
+        async function fetchApi() {
             const id = document.getElementById('id').value;
             const zone = document.getElementById('zone').value;
+            const statusBadge = document.getElementById('statusCode');
             
-            const req = await fetch('/api/tools/ml', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ id, zone })
-            });
-            const res = await req.json();
-            if(res.status) {
-                document.getElementById('result').style.display = 'block';
-                document.getElementById('resNick').innerText = res.data.userName;
-            } else { alert("Not Found"); }
+            if(!userApiKey) return alert("API Key Required!");
+            if(!id || !zone) return alert("Please fill ID and Zone");
+
+            statusBadge.innerText = "POSTING...";
+            statusBadge.style.background = "#fbbf24";
+
+            try {
+                const req = await fetch(`/api/tools/ml?apikey=${userApiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, zone })
+                });
+                const data = await req.json();
+                
+                statusBadge.innerText = `${req.status} ${req.statusText}`;
+                statusBadge.style.background = req.ok ? "#22c55e" : "#ef4444";
+                document.getElementById('jsonOutput').innerText = JSON.stringify(data, null, 4);
+            } catch(e) {
+                statusBadge.innerText = "ERROR";
+                statusBadge.style.background = "#ef4444";
+                document.getElementById('jsonOutput').innerText = JSON.stringify({ error: e.message }, null, 4);
+            }
+        }
+
+        function copyJson() {
+            navigator.clipboard.writeText(document.getElementById('jsonOutput').innerText);
+            alert("Copied!");
         }
     </script>
+    <style>.status-badge{background:#64748b;color:#fff;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:bold;}</style>
 </body>
 </html>

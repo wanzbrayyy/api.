@@ -4,66 +4,64 @@
 <body>
     <%- include('../partials/navbar', { user: user }) %>
     <div class="main-wrapper container animate__animated animate__fadeIn">
-        <div class="glass-panel" style="max-width: 500px; margin: 0 auto; padding: 30px;">
-            <h2 style="text-align: center; color: #f59e0b; margin-bottom: 20px;">
-                <i class="fa-solid fa-person-rifle"></i> PUBG Stalk
-            </h2>
-            
+        <div class="glass-panel" style="max-width: 800px; margin: 0 auto; padding: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0; color: #f59e0b;"><i class="fa-solid fa-person-rifle"></i> PUBG API Tester</h2>
+                <span class="status-badge" id="statusCode">READY</span>
+            </div>
+
             <div class="input-group">
-                <i class="fa-solid fa-user input-icon"></i>
+                <span style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 5px; display: block;">Endpoint: POST /api/tools/pubg</span>
                 <input type="text" id="username" class="input-modern" placeholder="PUBG Username">
             </div>
             
-            <button onclick="stalkPubg()" class="btn-modern" style="width: 100%; margin-top: 15px; background: #f59e0b;">
-                Check Player
-            </button>
+            <button onclick="fetchApi()" class="btn-modern" style="width: 100%; margin-top: 15px; background: #f59e0b;">POST Request</button>
 
-            <div id="result" style="margin-top: 25px; display: none;" class="glass-panel">
-                <div style="padding: 20px; text-align: center;">
-                    <div style="font-size: 3rem; color: #f59e0b; margin-bottom: 10px;">
-                        <i class="fa-solid fa-id-card"></i>
-                    </div>
-                    <h3 style="margin-bottom: 5px;">User Found!</h3>
-                    <p style="color: #94a3b8; font-size: 0.9rem;">ID: <span id="resId" style="color: white; font-weight: bold;"></span></p>
-                    <a id="resLink" href="#" target="_blank" class="btn-modern" style="margin-top: 15px; font-size: 0.8rem; background: rgba(255,255,255,0.1);">
-                        View Full Stats <i class="fa-solid fa-external-link-alt"></i>
-                    </a>
+            <div class="response-container" style="margin-top: 30px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <strong style="color: #cbd5e1;">Response Body (JSON)</strong>
+                    <button onclick="copyJson()" style="background: none; border: none; color: #f59e0b; cursor: pointer;">Copy</button>
                 </div>
+                <pre id="jsonOutput" style="background: #0f172a; padding: 20px; border-radius: 10px; overflow-x: auto; color: #a5b4fc; margin-top: 10px; font-family: monospace;">// Waiting...</pre>
             </div>
         </div>
     </div>
 
     <script>
-        async function stalkPubg() {
+        const userApiKey = "<%= user.apiKey || '' %>";
+        async function fetchApi() {
             const username = document.getElementById('username').value;
-            const btn = document.querySelector('button');
-            const resultBox = document.getElementById('result');
-            
-            if(!username) return alert("Please enter a username");
+            const statusBadge = document.getElementById('statusCode');
 
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Checking...';
-            resultBox.style.display = 'none';
-            
+            if(!userApiKey) return alert("API Key Required!");
+            if(!username) return alert("Please enter username");
+
+            statusBadge.innerText = "POSTING...";
+            statusBadge.style.background = "#fbbf24";
+
             try {
-                const req = await fetch('/api/tools/pubg', {
+                const req = await fetch(`/api/tools/pubg?apikey=${userApiKey}`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username })
                 });
-                const res = await req.json();
+                const data = await req.json();
                 
-                if(res.status && !res.data.error) {
-                    resultBox.style.display = 'block';
-                    document.getElementById('resId').innerText = res.data.userId;
-                    document.getElementById('resLink').href = res.data.profileUrl;
-                } else {
-                    alert("Player not found or private profile");
-                }
-            } catch(e) { 
-                alert("Server Error"); 
+                statusBadge.innerText = `${req.status} ${req.statusText}`;
+                statusBadge.style.background = req.ok ? "#22c55e" : "#ef4444";
+                document.getElementById('jsonOutput').innerText = JSON.stringify(data, null, 4);
+            } catch(e) {
+                statusBadge.innerText = "ERROR";
+                statusBadge.style.background = "#ef4444";
+                document.getElementById('jsonOutput').innerText = JSON.stringify({ error: e.message }, null, 4);
             }
-            btn.innerHTML = 'Check Player';
+        }
+
+        function copyJson() {
+            navigator.clipboard.writeText(document.getElementById('jsonOutput').innerText);
+            alert("Copied!");
         }
     </script>
+    <style>.status-badge{background:#64748b;color:#fff;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:bold;}</style>
 </body>
 </html>

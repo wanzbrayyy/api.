@@ -3,29 +3,61 @@
 <%- include('../partials/head') %>
 <body>
     <%- include('../partials/navbar', { user: user }) %>
-    <div class="main-wrapper container">
-        <div class="glass-panel" style="max-width: 500px; margin: 0 auto; padding: 30px; text-align: center;">
-            <h2 style="color: #25D366;">WA Channel Check</h2>
-            <input type="text" id="url" class="input-modern" placeholder="https://whatsapp.com/channel/...">
-            <button onclick="check()" class="btn-modern" style="width: 100%; margin-top: 15px; background: #25D366;">Check</button>
+    <div class="main-wrapper container animate__animated animate__fadeIn">
+        <div class="glass-panel" style="max-width: 800px; margin: 0 auto; padding: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0; color: #25D366;"><i class="fa-brands fa-whatsapp"></i> Channel Check API</h2>
+                <span class="status-badge" id="statusCode">READY</span>
+            </div>
+
+            <div class="input-group">
+                <span style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 5px; display: block;">Endpoint: GET /api/tools/checkch</span>
+                <input type="text" id="url" class="input-modern" placeholder="https://whatsapp.com/channel/...">
+            </div>
             
-            <div id="res" style="margin-top: 20px; display: none;">
-                <img id="img" src="" style="width: 100px; border-radius: 50%;">
-                <h3 id="title"></h3>
+            <button onclick="fetchApi()" class="btn-modern" style="width: 100%; margin-top: 15px; background: #25D366;">GET Request</button>
+
+            <div class="response-container" style="margin-top: 30px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <strong style="color: #cbd5e1;">Response Body (JSON)</strong>
+                    <button onclick="copyJson()" style="background: none; border: none; color: #25D366; cursor: pointer;">Copy</button>
+                </div>
+                <pre id="jsonOutput" style="background: #0f172a; padding: 20px; border-radius: 10px; overflow-x: auto; color: #a5b4fc; margin-top: 10px; font-family: monospace;">// Waiting...</pre>
             </div>
         </div>
     </div>
+
     <script>
-        async function check() {
+        const userApiKey = "<%= user.apiKey || '' %>";
+        async function fetchApi() {
             const url = document.getElementById('url').value;
-            const req = await fetch(`/api/tools/checkch?url=${url}`);
-            const res = await req.json();
-            if(res.status) {
-                document.getElementById('res').style.display = 'block';
-                document.getElementById('title').innerText = res.data.title;
-                document.getElementById('img').src = res.data.image;
-            } else { alert("Invalid Link"); }
+            const statusBadge = document.getElementById('statusCode');
+
+            if(!userApiKey) return alert("API Key Required!");
+            if(!url) return alert("Please enter URL");
+
+            statusBadge.innerText = "FETCHING...";
+            statusBadge.style.background = "#fbbf24";
+
+            try {
+                const req = await fetch(`/api/tools/checkch?url=${encodeURIComponent(url)}&apikey=${userApiKey}`);
+                const data = await req.json();
+                
+                statusBadge.innerText = `${req.status} ${req.statusText}`;
+                statusBadge.style.background = req.ok ? "#22c55e" : "#ef4444";
+                document.getElementById('jsonOutput').innerText = JSON.stringify(data, null, 4);
+            } catch(e) {
+                statusBadge.innerText = "ERROR";
+                statusBadge.style.background = "#ef4444";
+                document.getElementById('jsonOutput').innerText = JSON.stringify({ error: e.message }, null, 4);
+            }
+        }
+
+        function copyJson() {
+            navigator.clipboard.writeText(document.getElementById('jsonOutput').innerText);
+            alert("Copied!");
         }
     </script>
+    <style>.status-badge{background:#64748b;color:#fff;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:bold;}</style>
 </body>
 </html>

@@ -4,39 +4,60 @@
 <body>
     <%- include('../partials/navbar', { user: user }) %>
     <div class="main-wrapper container animate__animated animate__fadeIn">
-        <div class="glass-panel" style="padding: 20px;">
-            <h2 style="text-align: center; color: #e60023;">Pinterest Search</h2>
-            <div style="max-width: 500px; margin: 0 auto; display: flex; gap: 10px;">
-                <input type="text" id="query" class="input-modern" placeholder="Search Query...">
-                <button onclick="searchPin()" class="btn-modern" style="background: #e60023;">Go</button>
+        <div class="glass-panel" style="max-width: 800px; margin: 0 auto; padding: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0; color: #e60023;"><i class="fa-brands fa-pinterest"></i> Pinterest API</h2>
+                <span class="status-badge" id="statusCode">READY</span>
+            </div>
+
+            <div class="input-group">
+                <span style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 5px; display: block;">Endpoint: GET /api/tools/pinterest</span>
+                <input type="text" id="query" class="input-modern" placeholder="Search Query (e.g. Anime)">
             </div>
             
-            <div id="grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 30px;">
-                <!-- Images go here -->
+            <button onclick="fetchApi()" class="btn-modern" style="width: 100%; margin-top: 15px; background: #e60023;">GET Request</button>
+
+            <div class="response-container" style="margin-top: 30px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <strong style="color: #cbd5e1;">Response Body (JSON)</strong>
+                    <button onclick="copyJson()" style="background: none; border: none; color: #e60023; cursor: pointer;">Copy</button>
+                </div>
+                <pre id="jsonOutput" style="background: #0f172a; padding: 20px; border-radius: 10px; overflow-x: auto; color: #a5b4fc; margin-top: 10px; font-family: monospace;">// Waiting...</pre>
             </div>
         </div>
     </div>
+
     <script>
-        async function searchPin() {
+        const userApiKey = "<%= user.apiKey || '' %>";
+        async function fetchApi() {
             const query = document.getElementById('query').value;
-            const grid = document.getElementById('grid');
-            grid.innerHTML = '<p style="text-align:center; width:100%;">Searching...</p>';
-            
-            const req = await fetch(`/api/tools/pinterest?query=${query}`);
-            const res = await req.json();
-            
-            grid.innerHTML = '';
-            if(res.status) {
-                res.data.forEach(item => {
-                    grid.innerHTML += `
-                        <div style="background: #000; border-radius: 10px; overflow: hidden;">
-                            <img src="${item.image}" style="width: 100%; height: 150px; object-fit: cover;">
-                            <a href="${item.link}" target="_blank" style="display: block; padding: 5px; font-size: 0.8rem; text-align: center; color: white;">View</a>
-                        </div>
-                    `;
-                });
+            const statusBadge = document.getElementById('statusCode');
+
+            if(!userApiKey) return alert("API Key Required!");
+            if(!query) return alert("Please enter query");
+
+            statusBadge.innerText = "FETCHING...";
+            statusBadge.style.background = "#fbbf24";
+
+            try {
+                const req = await fetch(`/api/tools/pinterest?query=${query}&apikey=${userApiKey}`);
+                const data = await req.json();
+                
+                statusBadge.innerText = `${req.status} ${req.statusText}`;
+                statusBadge.style.background = req.ok ? "#22c55e" : "#ef4444";
+                document.getElementById('jsonOutput').innerText = JSON.stringify(data, null, 4);
+            } catch(e) {
+                statusBadge.innerText = "ERROR";
+                statusBadge.style.background = "#ef4444";
+                document.getElementById('jsonOutput').innerText = JSON.stringify({ error: e.message }, null, 4);
             }
         }
+
+        function copyJson() {
+            navigator.clipboard.writeText(document.getElementById('jsonOutput').innerText);
+            alert("Copied!");
+        }
     </script>
+    <style>.status-badge{background:#64748b;color:#fff;padding:4px 8px;border-radius:4px;font-size:12px;font-weight:bold;}</style>
 </body>
 </html>

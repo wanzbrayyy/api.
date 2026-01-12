@@ -5,24 +5,36 @@
     <%- include('partials/navbar', { user: user }) %>
 
     <div class="main-wrapper container animate__animated animate__fadeIn">
-        <div class="glass-panel" style="max-width: 600px; margin: 0 auto; padding: 40px 30px;">
-            <div class="profile-header">
-                <div class="avatar-wrapper">
-                    <img src="<%= user.avatar %>" alt="Profile" class="avatar-img">
-                    <div style="position: absolute; bottom: 5px; right: 5px; background: var(--secondary); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                        <i class="fa-solid fa-pen" style="font-size: 0.8rem;"></i>
-                    </div>
+        <div class="glass-panel profile-card">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <img src="<%= user.avatar %>" class="profile-avatar">
+                <h2 style="margin: 0;"><%= user.name %></h2>
+                <p style="color: #94a3b8;"><%= user.email %></p>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; margin-bottom: 30px; border: 1px solid var(--glass-border);">
+                <label style="color: #facc15; font-weight: 600; display: block; margin-bottom: 10px;">
+                    <i class="fa-solid fa-key"></i> your api key
+                </label>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <input type="text" value="<%= user.apiKey ? user.apiKey : 'No API Key Generated' %>" readonly class="input-modern" style="font-family: monospace; color: #818cf8;">
+                    <button onclick="navigator.clipboard.writeText('<%= user.apiKey %>')" class="btn-modern" style="padding: 0 15px;" title="Copy">
+                        <i class="fa-regular fa-copy"></i>
+                    </button>
                 </div>
-                <h2 style="margin: 0; font-size: 1.5rem;"><%= user.name %></h2>
-                <p style="color: #94a3b8; margin-top: 5px;"><%= user.email %></p>
-                <div style="margin-top: 15px;">
-                    <span style="background: rgba(79, 70, 229, 0.2); color: #818cf8; padding: 6px 14px; border-radius: 20px; font-size: 0.8rem;">PRO Member</span>
-                </div>
+                <form action="/api/user/generate-key" method="POST">
+                    <button type="submit" class="btn-modern" style="width: 100%; background: var(--secondary);">
+                        <%= user.apiKey ? 'Regenerate API Key' : 'Generate API Key' %>
+                    </button>
+                </form>
+                <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 10px;">
+                    *Use this key to access scraping endpoints. Keep it secret!
+                </p>
             </div>
 
             <form action="/api/user/profile" method="POST" enctype="multipart/form-data">
-                <div style="margin-bottom: 25px;">
-                    <label style="color: #94a3b8; margin-bottom: 10px; display: block; font-size: 0.9rem;">Display Name</label>
+                <h3 style="margin-bottom: 20px; font-size: 1.2rem;">Edit Profile</h3>
+                <div style="margin-bottom: 20px;">
                     <div class="input-group">
                         <i class="fa-solid fa-user-pen input-icon"></i>
                         <input type="text" name="name" value="<%= user.name %>" class="input-modern">
@@ -30,17 +42,13 @@
                 </div>
 
                 <div style="margin-bottom: 30px;">
-                    <label style="color: #94a3b8; margin-bottom: 10px; display: block; font-size: 0.9rem;">Update Avatar</label>
-                    <label for="file-upload" class="input-modern file-upload-label">
-                        <span style="color: #94a3b8;"><i class="fa-solid fa-cloud-arrow-up" style="margin-right: 10px;"></i> Select Image</span>
-                        <span id="file-name" style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem;">No file</span>
-                    </label>
-                    <input id="file-upload" type="file" name="avatar" style="display: none;" accept="image/*" onchange="document.getElementById('file-name').textContent = this.files[0].name.substring(0, 15) + '...'">
+                    <div class="input-group">
+                        <i class="fa-solid fa-image input-icon"></i>
+                        <input type="file" name="avatar" class="input-modern" style="padding: 10px 10px 10px 45px;">
+                    </div>
                 </div>
 
-                <button type="submit" class="btn-modern" style="width: 100%; padding: 14px;">
-                    Save Changes <i class="fa-solid fa-floppy-disk"></i>
-                </button>
+                <button type="submit" class="btn-primary">Save Changes</button>
             </form>
         </div>
     </div>

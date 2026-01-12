@@ -9,31 +9,33 @@
             <li>
                 <a href="<%= link('/dashboard') %>" class="nav-link">
                     <i class="fa-solid fa-gauge-high"></i>
-                    <span><%= global.nav_dashboard %></span>
+                    <span>Dash</span>
                 </a>
             </li>
             <li>
                 <a href="<%= link('/bars') %>" class="nav-link" style="color: #facc15;">
                     <i class="fa-solid fa-layer-group"></i>
-                    <span><%= global.nav_bars %></span>
+                    <span>Bars</span>
                 </a>
             </li>
             
+            <!-- LANGUAGE BUTTON -->
             <li>
                 <button onclick="toggleLangModal()" class="lang-btn">
                     <i class="fa-solid fa-earth-americas"></i> 
                     <span style="text-transform: uppercase;"><%= currentLang %></span>
                 </button>
             </li>
+            <!-- END LANGUAGE -->
 
             <li>
                 <a href="<%= link('/profile') %>" class="nav-link">
                     <i class="fa-regular fa-user"></i>
-                    <span><%= global.nav_profile %></span>
+                    <span>Profile</span>
                 </a>
             </li>
             <li>
-                <a href="/api/auth/logout" class="btn-logout" title="<%= global.nav_logout %>">
+                <a href="/api/auth/logout" class="btn-logout">
                     <i class="fa-solid fa-power-off"></i>
                 </a>
             </li>
@@ -47,13 +49,13 @@
             <li>
                 <a href="<%= link('/login') %>" class="nav-link">
                     <i class="fa-solid fa-right-to-bracket"></i>
-                    <span><%= global.nav_login %></span>
+                    <span>Login</span>
                 </a>
             </li>
             <li>
                 <a href="<%= link('/register') %>" class="nav-link" style="color: var(--secondary);">
                     <i class="fa-solid fa-user-plus"></i>
-                    <span><%= global.nav_join %></span>
+                    <span>Join</span>
                 </a>
             </li>
         <% } %>

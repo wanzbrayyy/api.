@@ -5,41 +5,41 @@
     <%- include('partials/navbar', { user: user }) %>
     <div class="main-wrapper container animate__animated animate__fadeIn">
         <div class="search-hero">
-            <h2>Explore Tools</h2>
-            <p style="color: #94a3b8;">Select a tool to start.</p>
+            <h2><%= t.hero_title %></h2>
+            <p style="color: #94a3b8;"><%= t.hero_desc %></p>
         </div>
         <div class="tools-grid">
-            <a href="/bars/github" class="tool-card">
+            <a href="<%= link('/bars/github') %>" class="tool-card">
                 <i class="fa-brands fa-github tool-icon brand-github"></i>
-                <div class="tool-title">Github Stalk</div>
+                <div class="tool-title"><%= t.tool_github %></div>
             </a>
-            <a href="/bars/pinterest" class="tool-card">
+            <a href="<%= link('/bars/pinterest') %>" class="tool-card">
                 <i class="fa-brands fa-pinterest tool-icon" style="color: #e60023;"></i>
-                <div class="tool-title">Pinterest Search</div>
+                <div class="tool-title"><%= t.tool_pinterest %></div>
             </a>
-            <a href="/bars/ml" class="tool-card">
+            <a href="<%= link('/bars/ml') %>" class="tool-card">
                 <i class="fa-solid fa-mobile-screen-button tool-icon brand-ml"></i>
-                <div class="tool-title">ML Stalk</div>
+                <div class="tool-title"><%= t.tool_ml %></div>
             </a>
-            <a href="/bars/ff" class="tool-card">
+            <a href="<%= link('/bars/ff') %>" class="tool-card">
                 <i class="fa-solid fa-fire tool-icon brand-ff"></i>
-                <div class="tool-title">FF Stalk</div>
+                <div class="tool-title"><%= t.tool_ff %></div>
             </a>
-            <a href="/bars/genshin" class="tool-card">
+            <a href="<%= link('/bars/genshin') %>" class="tool-card">
                 <i class="fa-solid fa-wind tool-icon brand-genshin"></i>
-                <div class="tool-title">Genshin Info</div>
+                <div class="tool-title"><%= t.tool_genshin %></div>
             </a>
-            <a href="/bars/pubg" class="tool-card">
+            <a href="<%= link('/bars/pubg') %>" class="tool-card">
                 <i class="fa-solid fa-person-rifle tool-icon brand-game"></i>
-                <div class="tool-title">PUBG Stalk</div>
+                <div class="tool-title"><%= t.tool_pubg %></div>
             </a>
-            <a href="/bars/ig" class="tool-card">
+            <a href="<%= link('/bars/ig') %>" class="tool-card">
                 <i class="fa-brands fa-instagram tool-icon" style="color: #d62976;"></i>
-                <div class="tool-title">IG Stalk</div>
+                <div class="tool-title"><%= t.tool_ig %></div>
             </a>
-            <a href="/bars/checkch" class="tool-card">
+            <a href="<%= link('/bars/checkch') %>" class="tool-card">
                 <i class="fa-brands fa-whatsapp tool-icon" style="color: #25D366;"></i>
-                <div class="tool-title">Cek ID Channel</div>
+                <div class="tool-title"><%= t.tool_checkch %></div>
             </a>
         </div>
     </div>

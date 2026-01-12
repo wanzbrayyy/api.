@@ -2,11 +2,11 @@
     <div class="lang-modal">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <h3 style="margin: 0; display: flex; align-items: center; gap: 10px;">
-                <i class="fa-solid fa-earth-americas" style="color: #3b82f6;"></i> Select Language
+                <i class="fa-solid fa-earth-americas" style="color: #3b82f6;"></i> <%= global.select_lang %>
             </h3>
             <button onclick="toggleLangModal()" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
         </div>
-        <p style="color: #64748b; font-size: 0.9rem;">Choose your preferred region & language.</p>
+        <p style="color: #64748b; font-size: 0.9rem;"><%= global.select_lang_desc %></p>
 
         <div class="lang-grid">
             <% langList.forEach(lang => { %>
@@ -25,25 +25,18 @@
         modal.classList.toggle('active');
     }
 
-    // Auto translate texts based on currentLang (Client Side Helper)
-    // Since we use server scraper, full page translation happens via URL reload.
-    // This script adds visual feedback.
-    document.addEventListener('DOMContentLoaded', () => {
-        const currentPath = window.location.pathname;
-        const links = document.querySelectorAll('a');
-        const langPrefix = "/<%= currentLang %>";
-        
-        links.forEach(link => {
-            const href = link.getAttribute('href');
-            // Fix internal links to keep language prefix
-            if (href && href.startsWith('/') && !href.startsWith('/api') && !href.startsWith(langPrefix)) {
-                if (href === '/login' || href === '/register' || href === '/') {
-                   // Auth pages logic
-                   link.href = langPrefix + href.replace('/' + currentLang, ''); 
-                } else if (!href.startsWith('/http')) {
-                   // Keep existing logic or let the middleware redirect
-                }
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            const modal = document.getElementById('langModal');
+            if (modal.classList.contains('active')) {
+                modal.classList.remove('active');
             }
-        });
+        }
+    });
+
+    document.getElementById('langModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('active');
+        }
     });
 </script>

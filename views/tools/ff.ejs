@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+<body>
+    <%- include('../partials/navbar', { user: user }) %>
+    <div class="main-wrapper container animate__animated animate__fadeIn">
+        <div class="glass-panel" style="max-width: 500px; margin: 0 auto; padding: 30px;">
+            <h2 style="text-align: center; color: #ef4444;"><i class="fa-solid fa-fire"></i> Free Fire Stalk</h2>
+            
+            <div class="input-group">
+                <input type="text" id="id" class="input-modern" placeholder="Player ID (e.g 12345678)">
+            </div>
+            <button onclick="stalkFF()" class="btn-modern" style="width: 100%; margin-top: 10px; background: #ef4444;">Check ID</button>
+
+            <div id="result" style="margin-top: 20px; display: none; text-align: center; padding: 10px;">
+                <h3>Nickname: <span id="resNick" style="color: #ef4444;"></span></h3>
+            </div>
+        </div>
+    </div>
+    <script>
+        async function stalkFF() {
+            const id = document.getElementById('id').value;
+            const btn = document.querySelector('button');
+            btn.innerText = "Checking...";
+            
+            try {
+                const req = await fetch('/api/tools/ff', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ id })
+                });
+                const res = await req.json();
+                if(res.status) {
+                    document.getElementById('result').style.display = 'block';
+                    document.getElementById('resNick').innerText = res.data.nickname;
+                } else { alert("ID Not Found"); }
+            } catch(e) { alert("Error"); }
+            btn.innerText = "Check ID";
+        }
+    </script>
+</body>
+</html>

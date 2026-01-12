@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+<body>
+    <%- include('../partials/navbar', { user: user }) %>
+    <div class="main-wrapper container animate__animated animate__fadeIn">
+        <div class="glass-panel" style="max-width: 550px; margin: 0 auto; padding: 30px;">
+            <h2 style="text-align: center; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px;">
+                <i class="fa-brands fa-instagram"></i> Instagram Stalk
+            </h2>
+            
+            <div class="input-group">
+                <i class="fa-brands fa-instagram input-icon"></i>
+                <input type="text" id="username" class="input-modern" placeholder="Username (without @)">
+            </div>
+            
+            <button onclick="stalkIg()" class="btn-modern" style="width: 100%; margin-top: 15px; background: linear-gradient(45deg, #f09433 0%, #dc2743 50%, #bc1888 100%);">
+                Stalk Profile
+            </button>
+
+            <div id="result" style="margin-top: 30px; display: none;" class="glass-panel">
+                <div style="padding: 25px; text-align: center;">
+                    <img id="resImg" src="" style="width: 120px; height: 120px; border-radius: 50%; border: 4px solid #bc1888; object-fit: cover; margin-bottom: 15px;">
+                    
+                    <h3 id="resName" style="margin-bottom: 5px;"></h3>
+                    <p id="resDesc" style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5;"></p>
+                    
+                    <a id="resLink" href="#" target="_blank" class="btn-modern" style="background: rgba(255,255,255,0.1); width: 100%;">
+                        Visit Profile <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function stalkIg() {
+            const username = document.getElementById('username').value;
+            const btn = document.querySelector('button');
+            const resultBox = document.getElementById('result');
+            
+            if(!username) return alert("Please enter username");
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Stalking...';
+            resultBox.style.display = 'none';
+            
+            try {
+                const req = await fetch(`/api/tools/ig?username=${username}`);
+                const res = await req.json();
+                
+                if(res.status && res.data && !res.data.error) {
+                    resultBox.style.display = 'block';
+                    document.getElementById('resImg').src = res.data.image || 'https://via.placeholder.com/150';
+                    document.getElementById('resName').innerText = res.data.title || username;
+                    document.getElementById('resDesc').innerText = res.data.description || 'No description available';
+                    document.getElementById('resLink').href = res.data.url || `https://instagram.com/${username}`;
+                } else {
+                    alert("Profile not found or private");
+                }
+            } catch(e) { 
+                alert("Server Error (Scraping Failed)"); 
+            }
+            btn.innerHTML = 'Stalk Profile';
+        }
+    </script>
+</body>
+</html>

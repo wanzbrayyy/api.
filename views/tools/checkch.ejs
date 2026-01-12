@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+<body>
+    <%- include('../partials/navbar', { user: user }) %>
+    <div class="main-wrapper container">
+        <div class="glass-panel" style="max-width: 500px; margin: 0 auto; padding: 30px; text-align: center;">
+            <h2 style="color: #25D366;">WA Channel Check</h2>
+            <input type="text" id="url" class="input-modern" placeholder="https://whatsapp.com/channel/...">
+            <button onclick="check()" class="btn-modern" style="width: 100%; margin-top: 15px; background: #25D366;">Check</button>
+            
+            <div id="res" style="margin-top: 20px; display: none;">
+                <img id="img" src="" style="width: 100px; border-radius: 50%;">
+                <h3 id="title"></h3>
+            </div>
+        </div>
+    </div>
+    <script>
+        async function check() {
+            const url = document.getElementById('url').value;
+            const req = await fetch(`/api/tools/checkch?url=${url}`);
+            const res = await req.json();
+            if(res.status) {
+                document.getElementById('res').style.display = 'block';
+                document.getElementById('title').innerText = res.data.title;
+                document.getElementById('img').src = res.data.image;
+            } else { alert("Invalid Link"); }
+        }
+    </script>
+</body>
+</html>

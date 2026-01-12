@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+<body>
+    <%- include('../partials/navbar', { user: user }) %>
+    <div class="main-wrapper container animate__animated animate__fadeIn">
+        <div class="glass-panel" style="max-width: 600px; margin: 0 auto; padding: 30px;">
+            <h2 style="text-align: center; margin-bottom: 20px;"><i class="fa-brands fa-github"></i> Github Stalk</h2>
+            
+            <div class="input-group">
+                <input type="text" id="username" class="input-modern" placeholder="Github Username">
+            </div>
+            <button onclick="stalkGithub()" class="btn-modern" style="width: 100%; margin-top: 10px;">Search</button>
+
+            <div id="result" style="margin-top: 20px; display: none;" class="glass-panel">
+                <div style="text-align: center; padding: 20px;">
+                    <img id="resAvatar" src="" style="width: 100px; border-radius: 50%;">
+                    <h3 id="resName"></h3>
+                    <p id="resBio" style="color: #ccc;"></p>
+                    <div style="display: flex; justify-content: space-around; margin-top: 15px;">
+                        <span>📚 Repos: <b id="resRepos"></b></span>
+                        <span>👥 Followers: <b id="resFollowers"></b></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        async function stalkGithub() {
+            const username = document.getElementById('username').value;
+            if(!username) return alert("Enter username");
+            
+            const btn = document.querySelector('button');
+            btn.innerText = "Searching...";
+            
+            try {
+                const req = await fetch(`/api/tools/github?username=${username}`);
+                const res = await req.json();
+                if(res.status) {
+                    document.getElementById('result').style.display = 'block';
+                    document.getElementById('resAvatar').src = res.data.avatar;
+                    document.getElementById('resName').innerText = res.data.nickname || res.data.username;
+                    document.getElementById('resBio').innerText = res.data.bio || "-";
+                    document.getElementById('resRepos').innerText = res.data.repos;
+                    document.getElementById('resFollowers').innerText = res.data.followers;
+                } else {
+                    alert("User not found");
+                }
+            } catch(e) { alert("Error"); }
+            btn.innerText = "Search";
+        }
+    </script>
+</body>
+</html>

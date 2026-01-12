@@ -10,6 +10,14 @@ export const getDashboard = async (req: Request, res: Response) => {
     res.redirect("/login");
   }
 };
+export const getBars = async (req: Request, res: Response) => {
+    try {
+      const user = await User.findById(req.user?.userId);
+      res.render("bars", { user });
+    } catch (error) {
+      res.redirect("/login");
+    }
+};
 
 export const getProfile = async (req: Request, res: Response) => {
   try {

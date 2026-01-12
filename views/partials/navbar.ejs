@@ -7,21 +7,28 @@
     <ul class="nav-menu">
         <% if (user) { %>
             <li>
-                <a href="/dashboard" class="nav-link" title="Dashboard">
+                <a href="/dashboard" class="nav-link">
                     <i class="fa-solid fa-gauge-high"></i>
-                    <span>Dashboard</span>
+                    <span>Dash</span>
                 </a>
             </li>
+            <!-- TOMBOL BARS BARU -->
             <li>
-                <a href="/profile" class="nav-link" title="Profile">
+                <a href="/bars" class="nav-link" style="color: #facc15;">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Bars</span>
+                </a>
+            </li>
+            <!-- END TOMBOL BARS -->
+            <li>
+                <a href="/profile" class="nav-link">
                     <i class="fa-regular fa-user"></i>
                     <span>Profile</span>
                 </a>
             </li>
             <li>
-                <a href="/api/auth/logout" class="btn-logout" title="Logout">
+                <a href="/api/auth/logout" class="btn-logout">
                     <i class="fa-solid fa-power-off"></i>
-                    <span>Logout</span>
                 </a>
             </li>
         <% } else { %>

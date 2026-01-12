@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+<body>
+    <%- include('../partials/navbar', { user: user }) %>
+    <div class="main-wrapper container animate__animated animate__fadeIn">
+        <div class="glass-panel" style="padding: 30px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="color: #a855f7; margin-bottom: 10px;">
+                    <i class="fa-solid fa-wind"></i> Genshin Characters
+                </h2>
+                <p style="color: #94a3b8;">List of all characters from Genshin Impact</p>
+                <div style="margin-top: 15px;">
+                    <button onclick="loadChars()" class="btn-modern" style="background: #a855f7;">
+                        <i class="fa-solid fa-rotate"></i> Load Data
+                    </button>
+                </div>
+            </div>
+
+            <div id="loader" style="text-align: center; display: none; padding: 40px;">
+                <i class="fa-solid fa-circle-notch fa-spin fa-3x" style="color: #a855f7;"></i>
+            </div>
+
+            <div id="charGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px;">
+                <!-- Characters will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = loadChars;
+
+        async function loadChars() {
+            const grid = document.getElementById('charGrid');
+            const loader = document.getElementById('loader');
+            
+            grid.innerHTML = '';
+            loader.style.display = 'block';
+
+            try {
+                const req = await fetch('/api/tools/genshin');
+                const res = await req.json();
+
+                loader.style.display = 'none';
+
+                if(res.status && Array.isArray(res.data)) {
+                    res.data.forEach(char => {
+                        grid.innerHTML += `
+                            <a href="${char.url}" target="_blank" class="glass-panel" style="padding: 15px; text-align: center; display: block; text-decoration: none; transition: 0.3s; background: rgba(255,255,255,0.05);">
+                                <img src="${char.icon}" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover; margin-bottom: 10px;">
+                                <div style="font-size: 0.9rem; font-weight: 600; color: white;">${char.name}</div>
+                            </a>
+                        `;
+                    });
+                } else {
+                    grid.innerHTML = '<p style="text-align:center; width:100%;">Failed to load data</p>';
+                }
+            } catch(e) {
+                loader.style.display = 'none';
+                alert("Connection Error");
+            }
+        }
+    </script>
+</body>
+</html>

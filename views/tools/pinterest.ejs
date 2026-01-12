@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+<body>
+    <%- include('../partials/navbar', { user: user }) %>
+    <div class="main-wrapper container animate__animated animate__fadeIn">
+        <div class="glass-panel" style="padding: 20px;">
+            <h2 style="text-align: center; color: #e60023;">Pinterest Search</h2>
+            <div style="max-width: 500px; margin: 0 auto; display: flex; gap: 10px;">
+                <input type="text" id="query" class="input-modern" placeholder="Search Query...">
+                <button onclick="searchPin()" class="btn-modern" style="background: #e60023;">Go</button>
+            </div>
+            
+            <div id="grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 30px;">
+                <!-- Images go here -->
+            </div>
+        </div>
+    </div>
+    <script>
+        async function searchPin() {
+            const query = document.getElementById('query').value;
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '<p style="text-align:center; width:100%;">Searching...</p>';
+            
+            const req = await fetch(`/api/tools/pinterest?query=${query}`);
+            const res = await req.json();
+            
+            grid.innerHTML = '';
+            if(res.status) {
+                res.data.forEach(item => {
+                    grid.innerHTML += `
+                        <div style="background: #000; border-radius: 10px; overflow: hidden;">
+                            <img src="${item.image}" style="width: 100%; height: 150px; object-fit: cover;">
+                            <a href="${item.link}" target="_blank" style="display: block; padding: 5px; font-size: 0.8rem; text-align: center; color: white;">View</a>
+                        </div>
+                    `;
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -275,3 +275,111 @@ a {
         padding: 30px 20px;
     }
 }
+/* ... CSS sebelumnya ... */
+
+/* BARS / TOOLS PAGE STYLES */
+.search-hero {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.search-hero h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+    padding-bottom: 40px;
+}
+
+.tool-card {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+    position: relative;
+    overflow: hidden;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.tool-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    transition: 0.3s;
+}
+
+.tool-card:hover .tool-icon {
+    transform: scale(1.1);
+}
+
+.tool-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+/* Brand Colors */
+.brand-tiktok { color: #fe2c55; }
+.brand-spotify { color: #1db954; }
+.brand-github { color: #fff; }
+.brand-game { color: #f59e0b; }
+.brand-ml { color: #3b82f6; }
+.brand-ff { color: #ef4444; }
+.brand-genshin { color: #a855f7; }
+
+/* Modal / Search Overlay */
+.search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    display: none; /* Hidden by default */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.search-modal {
+    width: 100%;
+    max-width: 500px;
+    background: var(--dark);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 30px;
+    position: relative;
+    animation: zoomIn 0.3s ease;
+}
+
+.close-search {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #94a3b8;
+}

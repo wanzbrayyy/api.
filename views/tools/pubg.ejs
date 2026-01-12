@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+<body>
+    <%- include('../partials/navbar', { user: user }) %>
+    <div class="main-wrapper container animate__animated animate__fadeIn">
+        <div class="glass-panel" style="max-width: 500px; margin: 0 auto; padding: 30px;">
+            <h2 style="text-align: center; color: #f59e0b; margin-bottom: 20px;">
+                <i class="fa-solid fa-person-rifle"></i> PUBG Stalk
+            </h2>
+            
+            <div class="input-group">
+                <i class="fa-solid fa-user input-icon"></i>
+                <input type="text" id="username" class="input-modern" placeholder="PUBG Username">
+            </div>
+            
+            <button onclick="stalkPubg()" class="btn-modern" style="width: 100%; margin-top: 15px; background: #f59e0b;">
+                Check Player
+            </button>
+
+            <div id="result" style="margin-top: 25px; display: none;" class="glass-panel">
+                <div style="padding: 20px; text-align: center;">
+                    <div style="font-size: 3rem; color: #f59e0b; margin-bottom: 10px;">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <h3 style="margin-bottom: 5px;">User Found!</h3>
+                    <p style="color: #94a3b8; font-size: 0.9rem;">ID: <span id="resId" style="color: white; font-weight: bold;"></span></p>
+                    <a id="resLink" href="#" target="_blank" class="btn-modern" style="margin-top: 15px; font-size: 0.8rem; background: rgba(255,255,255,0.1);">
+                        View Full Stats <i class="fa-solid fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function stalkPubg() {
+            const username = document.getElementById('username').value;
+            const btn = document.querySelector('button');
+            const resultBox = document.getElementById('result');
+            
+            if(!username) return alert("Please enter a username");
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Checking...';
+            resultBox.style.display = 'none';
+            
+            try {
+                const req = await fetch('/api/tools/pubg', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ username })
+                });
+                const res = await req.json();
+                
+                if(res.status && !res.data.error) {
+                    resultBox.style.display = 'block';
+                    document.getElementById('resId').innerText = res.data.userId;
+                    document.getElementById('resLink').href = res.data.profileUrl;
+                } else {
+                    alert("Player not found or private profile");
+                }
+            } catch(e) { 
+                alert("Server Error"); 
+            }
+            btn.innerHTML = 'Check Player';
+        }
+    </script>
+</body>
+</html>

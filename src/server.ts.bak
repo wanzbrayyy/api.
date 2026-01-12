@@ -32,11 +32,12 @@ app.use("/api", apiRoutes);
 const server = http.createServer(async (req, res) => {
   if (req.url?.startsWith("/parties/globe")) {
     try {
-      // FIX: Gunakan 'as any' untuk menghindari error TS2345
+      // FIX: Tambahkan 'as any' pada opsi objek untuk membungkam error TS2353
       await routePartykitRequest(req as any, res as any, {
         party: Globe,
         room: "global-room" 
-      });
+      } as any);
+      
     } catch (e) {
       console.error(e);
       res.statusCode = 500;

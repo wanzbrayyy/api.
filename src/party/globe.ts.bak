@@ -6,12 +6,11 @@ type ConnectionState = {
   position: Position;
 };
 
-// FIX: Tambahkan <any> pada extends Server
 export class Globe extends Server<any> {
   onConnect(conn: Connection<ConnectionState>, ctx: ConnectionContext) {
     conn.setState({ position: { x: 0, y: 0 } });
     
-    // FIX: Gunakan optional chaining (?.) agar tidak error jika state null
+    // Gunakan optional chaining untuk keamanan
     const pos = conn.state?.position || { x: 0, y: 0 };
 
     this.broadcast(JSON.stringify({
@@ -21,7 +20,8 @@ export class Globe extends Server<any> {
     }));
   }
 
-  onMessage(message: string, sender: Connection<ConnectionState>) {
+  // FIX: Urutan parameter DITUKAR (sender dulu, baru message)
+  onMessage(sender: Connection<ConnectionState>, message: string) {
     const data = JSON.parse(message) as OutgoingMessage;
     
     if (data.type === "position-update") {

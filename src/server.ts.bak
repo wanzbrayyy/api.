@@ -4,13 +4,15 @@ import { fileURLToPath } from "url";
 import express from "express";
 import cookieParser from "cookie-parser";
 import { routePartykitRequest } from "partyserver";
-import { connectDB } from "./config/database.js"; // Note: tambahkan .js extension untuk local import di ESM
+
+// PERHATIKAN: Ada tambahan .js di belakang nama file import (Wajib di mode ESM)
+import { connectDB } from "./config/database.js";
 import { CONSTANTS } from "./config/constants.js";
 import viewRoutes from "./routes/viewRoutes.js";
 import apiRoutes from "./routes/apiRoutes.js";
 import { Globe } from "./party/globe.js";
 
-// Setup __dirname untuk ESM
+// Setup pengganti __dirname untuk ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -19,9 +21,10 @@ const app = express();
 connectDB();
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "../views"));
+// Sesuaikan path views agar mengarah ke folder yang benar saat di-deploy
+app.set("views", path.join(process.cwd(), "views"));
 
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(process.cwd(), "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

@@ -6,14 +6,18 @@ type ConnectionState = {
   position: Position;
 };
 
-export class Globe extends Server {
+// FIX: Tambahkan <any> pada extends Server
+export class Globe extends Server<any> {
   onConnect(conn: Connection<ConnectionState>, ctx: ConnectionContext) {
     conn.setState({ position: { x: 0, y: 0 } });
     
+    // FIX: Gunakan optional chaining (?.) agar tidak error jika state null
+    const pos = conn.state?.position || { x: 0, y: 0 };
+
     this.broadcast(JSON.stringify({
       type: "user-joined",
       id: conn.id,
-      position: conn.state.position
+      position: pos
     }));
   }
 

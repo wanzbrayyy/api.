@@ -5,14 +5,12 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import { routePartykitRequest } from "partyserver";
 
-// PERHATIKAN: Ada tambahan .js di belakang nama file import (Wajib di mode ESM)
 import { connectDB } from "./config/database.js";
 import { CONSTANTS } from "./config/constants.js";
 import viewRoutes from "./routes/viewRoutes.js";
 import apiRoutes from "./routes/apiRoutes.js";
 import { Globe } from "./party/globe.js";
 
-// Setup pengganti __dirname untuk ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -21,7 +19,6 @@ const app = express();
 connectDB();
 
 app.set("view engine", "ejs");
-// Sesuaikan path views agar mengarah ke folder yang benar saat di-deploy
 app.set("views", path.join(process.cwd(), "views"));
 
 app.use(express.static(path.join(process.cwd(), "public")));
@@ -35,7 +32,8 @@ app.use("/api", apiRoutes);
 const server = http.createServer(async (req, res) => {
   if (req.url?.startsWith("/parties/globe")) {
     try {
-      await routePartykitRequest(req, res, {
+      // FIX: Gunakan 'as any' untuk menghindari error TS2345
+      await routePartykitRequest(req as any, res as any, {
         party: Globe,
         room: "global-room" 
       });

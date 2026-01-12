@@ -1,5 +1,5 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import { CONSTANTS } from "../config/constants";
+import { CONSTANTS } from "../config/constants.js";
 
 const s3Client = new S3Client({
   region: "auto",

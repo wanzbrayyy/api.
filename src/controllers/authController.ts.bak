@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../models/user.js";
-import { CONSTANTS } from "../config/constants.js";
+import User from "../models/user";
+import { CONSTANTS } from "../config/constants";
 
 export const getLogin = (req: Request, res: Response) => {
   res.render("login", { user: null, error: null });

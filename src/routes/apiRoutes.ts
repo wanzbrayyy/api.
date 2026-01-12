@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { register, login, logout } from "../controllers/authController";
-import { updateProfile } from "../controllers/userController";
-import { requireAuth } from "../middleware/authMiddleware";
-import { upload } from "../middleware/uploadMiddleware";
+import { register, login, logout } from "../controllers/authController.js";
+import { updateProfile } from "../controllers/userController.js";
+import { requireAuth } from "../middleware/authMiddleware.js";
+import { upload } from "../middleware/uploadMiddleware.js";
 
 const router = Router();
 

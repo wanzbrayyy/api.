@@ -1,6 +1,6 @@
 import { Server } from "partyserver";
 import type { Connection, ConnectionContext } from "partyserver";
-import type { OutgoingMessage, Position } from "./shared";
+import type { OutgoingMessage, Position } from "./shared.js";
 
 type ConnectionState = {
   position: Position;

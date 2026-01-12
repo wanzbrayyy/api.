@@ -9,7 +9,7 @@
             <li>
                 <a href="/dashboard" class="nav-link" title="Dashboard">
                     <i class="fa-solid fa-gauge-high"></i>
-                    <span>Dashboard</span>
+                    <span>Dash</span>
                 </a>
             </li>
             <li>
@@ -19,9 +19,9 @@
                 </a>
             </li>
             <li>
-                <a href="/api/auth/logout" class="btn-logout" title="Logout">
-                    <i class="fa-solid fa-power-off"></i>
-                    <span>Logout</span>
+                <a href="/api/auth/logout" class="btn-modern" style="padding: 6px 16px; font-size: 0.8rem;">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span style="display: inline;">Logout</span>
                 </a>
             </li>
         <% } else { %>
@@ -32,7 +32,7 @@
                 </a>
             </li>
             <li>
-                <a href="/register" class="nav-link" style="color: var(--secondary);">
+                <a href="/register" class="btn-modern" style="padding: 6px 16px; font-size: 0.8rem;">
                     <i class="fa-solid fa-user-plus"></i>
                     <span>Join</span>
                 </a>

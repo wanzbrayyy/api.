@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head') %>
+<body>
+    <%- include('partials/navbar', { user: user }) %>
+
+    <div class="container animate__animated animate__fadeIn">
+        <div class="glass-panel" style="max-width: 600px; margin: 0 auto; padding: 40px;">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <div style="position: relative; width: 150px; height: 150px; margin: 0 auto 20px;">
+                    <img src="<%= user.avatar %>" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid rgba(255,255,255,0.1); box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);">
+                    <div style="position: absolute; bottom: 10px; right: 10px; background: var(--secondary); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 10px rgba(0,0,0,0.3);">
+                        <i class="fa-solid fa-camera" style="font-size: 0.9rem;"></i>
+                    </div>
+                </div>
+                <h2 style="margin: 0;"><%= user.name %></h2>
+                <p style="color: #94a3b8; margin-top: 5px;"><%= user.email %></p>
+                <div style="margin-top: 10px;">
+                    <span style="background: rgba(79, 70, 229, 0.2); color: #818cf8; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem;">Member</span>
+                </div>
+            </div>
+
+            <form action="/api/user/profile" method="POST" enctype="multipart/form-data">
+                <div style="margin-bottom: 25px;">
+                    <label style="color: #94a3b8; margin-bottom: 10px; display: block;">Display Name</label>
+                    <div style="position: relative;">
+                        <i class="fa-solid fa-user-pen" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                        <input type="text" name="name" value="<%= user.name %>" class="input-modern" style="padding-left: 45px;">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <label style="color: #94a3b8; margin-bottom: 10px; display: block;">Update Avatar</label>
+                    <label for="file-upload" class="input-modern" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; border-style: dashed;">
+                        <span style="color: #94a3b8;"><i class="fa-solid fa-cloud-arrow-up" style="margin-right: 10px;"></i> Choose Image...</span>
+                        <span id="file-name" style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">No file selected</span>
+                    </label>
+                    <input id="file-upload" type="file" name="avatar" style="display: none;" accept="image/*" onchange="document.getElementById('file-name').textContent = this.files[0].name">
+                </div>
+
+                <button type="submit" class="btn-modern" style="width: 100%; justify-content: center;">
+                    Save Changes <i class="fa-solid fa-floppy-disk"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

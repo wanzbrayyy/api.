@@ -1,0 +1,37 @@
+<nav class="glass-panel animate__animated animate__fadeInDown" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1200px; z-index: 1000; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;">
+    <a href="/" style="text-decoration: none; font-size: 1.5rem; font-weight: 700; background: linear-gradient(to right, #4f46e5, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        <i class="fa-solid fa-rocket"></i> PartyAPI
+    </a>
+
+    <ul style="list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; align-items: center;">
+        <% if (user) { %>
+            <li>
+                <a href="/dashboard" style="color: white; text-decoration: none; font-weight: 500; transition: 0.3s;" onmouseover="this.style.color='#ec4899'" onmouseout="this.style.color='white'">
+                    <i class="fa-solid fa-gauge-high"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="/profile" style="color: white; text-decoration: none; font-weight: 500; transition: 0.3s;" onmouseover="this.style.color='#ec4899'" onmouseout="this.style.color='white'">
+                    <i class="fa-regular fa-user"></i> Profile
+                </a>
+            </li>
+            <li>
+                <a href="/api/auth/logout" class="btn-modern" style="padding: 8px 16px; font-size: 0.9rem;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </li>
+        <% } else { %>
+            <li>
+                <a href="/login" style="color: white; text-decoration: none; font-weight: 500; transition: 0.3s;" onmouseover="this.style.color='#ec4899'" onmouseout="this.style.color='white'">
+                    <i class="fa-solid fa-right-to-bracket"></i> Login
+                </a>
+            </li>
+            <li>
+                <a href="/register" class="btn-modern" style="padding: 8px 16px; font-size: 0.9rem;">
+                    <i class="fa-solid fa-user-plus"></i> Register
+                </a>
+            </li>
+        <% } %>
+    </ul>
+</nav>
+<div style="height: 100px;"></div>

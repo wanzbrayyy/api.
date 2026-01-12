@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head') %>
+<body>
+    <%- include('partials/navbar', { user: user }) %>
+
+    <div style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 20px;">
+        <div class="glass-panel animate__animated animate__zoomIn" style="width: 100%; max-width: 400px; padding: 40px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="font-size: 2rem; margin-bottom: 10px; background: linear-gradient(to right, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Welcome Back</h2>
+                <p style="color: #94a3b8;">Enter your credentials to access the party.</p>
+            </div>
+
+            <form action="/api/auth/login" method="POST">
+                <div class="form-group" style="margin-bottom: 20px; position: relative;">
+                    <i class="fa-solid fa-envelope" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                    <input type="email" name="email" placeholder="Email Address" required class="input-modern" style="padding-left: 45px;">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 30px; position: relative;">
+                    <i class="fa-solid fa-lock" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+                    <input type="password" name="password" placeholder="Password" required class="input-modern" style="padding-left: 45px;">
+                </div>
+
+                <button type="submit" class="btn-modern" style="width: 100%; justify-content: center; padding: 12px; font-size: 1.1rem;">
+                    Login to Party <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <div style="text-align: center; margin-top: 20px; color: #94a3b8;">
+                Don't have an account? <a href="/register" style="color: #818cf8; text-decoration: none;">Register here</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <% if (error) { %>
+    <script>
+        Toastify({
+            text: "<%= error %>",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
+        }).showToast();
+    </script>
+    <% } %>
+</body>
+</html>

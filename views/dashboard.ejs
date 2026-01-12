@@ -4,123 +4,40 @@
 <body>
     <%- include('partials/navbar', { user: user }) %>
 
-    <div class="container animate__animated animate__fadeInUp">
+    <div class="main-wrapper container animate__animated animate__fadeInUp">
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px;">
-            <div class="glass-panel" style="padding: 20px; display: flex; align-items: center; gap: 20px;">
-                <div style="background: rgba(79, 70, 229, 0.2); padding: 15px; border-radius: 12px; color: #818cf8;">
-                    <i class="fa-solid fa-user-astronaut fa-2x"></i>
+        <div class="dashboard-grid">
+            <div class="glass-panel stat-card">
+                <div class="stat-icon" style="background: rgba(79, 70, 229, 0.2); color: #818cf8;">
+                    <i class="fa-solid fa-user-astronaut"></i>
                 </div>
                 <div>
-                    <h3 style="margin: 0;">Welcome, <%= user.name %></h3>
-                    <p style="margin: 0; color: #94a3b8; font-size: 0.9rem;">Ready to explore?</p>
+                    <h3 style="margin: 0; font-size: 1.1rem;">Hello, <%= user.name %></h3>
+                    <p style="margin: 0; color: #94a3b8; font-size: 0.85rem;">Welcome back!</p>
                 </div>
             </div>
 
-            <div class="glass-panel" style="padding: 20px; display: flex; align-items: center; gap: 20px;">
-                <div style="background: rgba(236, 72, 153, 0.2); padding: 15px; border-radius: 12px; color: #f472b6;">
-                    <i class="fa-solid fa-signal fa-2x"></i>
+            <div class="glass-panel stat-card">
+                <div class="stat-icon" style="background: rgba(236, 72, 153, 0.2); color: #f472b6;">
+                    <i class="fa-solid fa-signal"></i>
                 </div>
                 <div>
-                    <h3 style="margin: 0;">Live Status</h3>
-                    <p style="margin: 0; color: #4ade80; font-size: 0.9rem;">● Connected to PartyKit</p>
+                    <h3 style="margin: 0; font-size: 1.1rem;">System Status</h3>
+                    <p style="margin: 0; color: #4ade80; font-size: 0.85rem;">● Online (API Only)</p>
                 </div>
             </div>
         </div>
 
-        <div class="glass-panel" style="padding: 30px; min-height: 400px; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: 20px; left: 20px; z-index: 10;">
-                <h3 style="margin-bottom: 5px;">Interactive Zone</h3>
-                <p style="color: #94a3b8; font-size: 0.9rem;">Move your cursor to interact with others in real-time.</p>
+        <div class="glass-panel interactive-zone">
+            <div class="zone-header">
+                <h3 style="margin: 0; font-size: 1rem;">Interactive Zone</h3>
+                <p style="color: #94a3b8; font-size: 0.8rem; margin: 0;">Visualize space (Client-Side)</p>
             </div>
             
-            <div id="cursors-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
-            
-            <div style="display: flex; justify-content: center; align-items: center; height: 100%; opacity: 0.1;">
-                <i class="fa-solid fa-globe fa-10x animate__animated animate__pulse animate__infinite" style="animation-duration: 3s;"></i>
+            <div style="display: flex; justify-content: center; align-items: center; flex: 1; opacity: 0.1; padding: 40px;">
+                <i class="fa-solid fa-globe fa-spin" style="font-size: clamp(8rem, 20vw, 15rem); animation-duration: 20s;"></i>
             </div>
         </div>
     </div>
-
-    <!-- Script to handle PartyKit logic for visual representation -->
-    <script type="importmap">
-        {
-          "imports": {
-            "partysocket": "https://unpkg.com/partysocket/dist/index.js"
-          }
-        }
-    </script>
-    <script type="module">
-        import PartySocket from "partysocket";
-
-        // Generate a random color for this user
-        const myColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-        const container = document.getElementById('cursors-container');
-        const cursors = new Map();
-
-        const partySocket = new PartySocket({
-            host: window.location.host,
-            room: "global-room"
-        });
-
-        function createCursor(id, color) {
-            const el = document.createElement('div');
-            el.innerHTML = `<i class="fa-solid fa-location-arrow" style="transform: rotate(-45deg);"></i>`;
-            el.style.position = 'absolute';
-            el.style.color = color || '#fff';
-            el.style.transition = 'transform 0.1s linear, top 0.1s linear, left 0.1s linear';
-            el.style.pointerEvents = 'none';
-            el.style.zIndex = '100';
-            el.style.textShadow = '0 0 10px ' + color;
-            
-            // Add label
-            const label = document.createElement('span');
-            label.textContent = id.slice(0, 4);
-            label.style.fontSize = '10px';
-            label.style.marginLeft = '15px';
-            label.style.background = 'rgba(0,0,0,0.5)';
-            label.style.padding = '2px 4px';
-            label.style.borderRadius = '4px';
-            el.appendChild(label);
-            
-            container.appendChild(el);
-            return el;
-        }
-
-        partySocket.addEventListener("message", (event) => {
-            const data = JSON.parse(event.data);
-            
-            if (data.type === "position-update") {
-                if (data.id === partySocket.id) return; 
-
-                let cursor = cursors.get(data.id);
-                if (!cursor) {
-                    cursor = createCursor(data.id, '#ec4899');
-                    cursors.set(data.id, cursor);
-                }
-                
-                // Adjust coordinates relative to the container
-                const rect = container.getBoundingClientRect();
-                const x = data.position.x - rect.left;
-                const y = data.position.y - rect.top;
-
-                cursor.style.transform = `translate(${x}px, ${y}px)`;
-            } else if (data.type === "user-left") {
-                const cursor = cursors.get(data.id);
-                if (cursor) {
-                    cursor.remove();
-                    cursors.delete(data.id);
-                }
-            }
-        });
-
-        document.addEventListener("mousemove", (e) => {
-            const position = { x: e.clientX, y: e.clientY };
-            partySocket.send(JSON.stringify({
-                type: "position-update",
-                position: position
-            }));
-        });
-    </script>
 </body>
 </html>

@@ -4,36 +4,36 @@
 <body>
     <%- include('partials/navbar', { user: user }) %>
 
-    <div style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 20px;">
-        <div class="glass-panel animate__animated animate__zoomIn" style="width: 100%; max-width: 400px; padding: 40px;">
-            <div style="text-align: center; margin-bottom: 30px;">
-                <h2 style="font-size: 2rem; margin-bottom: 10px; background: linear-gradient(to right, #fff, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Join the Squad</h2>
+    <div class="main-wrapper auth-container">
+        <div class="glass-panel auth-box animate__animated animate__zoomIn">
+            <div class="form-header">
+                <h2 class="gradient-text">Join Squad</h2>
                 <p style="color: #94a3b8;">Create your account to get started.</p>
             </div>
 
             <form action="/api/auth/register" method="POST">
-                <div class="form-group" style="margin-bottom: 20px; position: relative;">
-                    <i class="fa-solid fa-user" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
-                    <input type="text" name="name" placeholder="Full Name" required class="input-modern" style="padding-left: 45px;">
+                <div class="input-group">
+                    <i class="fa-solid fa-user input-icon"></i>
+                    <input type="text" name="name" placeholder="Full Name" required class="input-modern">
                 </div>
 
-                <div class="form-group" style="margin-bottom: 20px; position: relative;">
-                    <i class="fa-solid fa-envelope" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
-                    <input type="email" name="email" placeholder="Email Address" required class="input-modern" style="padding-left: 45px;">
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input type="email" name="email" placeholder="Email Address" required class="input-modern">
                 </div>
 
-                <div class="form-group" style="margin-bottom: 30px; position: relative;">
-                    <i class="fa-solid fa-lock" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
-                    <input type="password" name="password" placeholder="Password" required class="input-modern" style="padding-left: 45px;">
+                <div class="input-group">
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <input type="password" name="password" placeholder="Password" required class="input-modern">
                 </div>
 
-                <button type="submit" class="btn-modern" style="width: 100%; justify-content: center; padding: 12px; font-size: 1.1rem;">
+                <button type="submit" class="btn-modern" style="width: 100%; padding: 14px;">
                     Create Account <i class="fa-solid fa-rocket"></i>
                 </button>
             </form>
 
             <div style="text-align: center; margin-top: 20px; color: #94a3b8;">
-                Already have an account? <a href="/login" style="color: #ec4899; text-decoration: none;">Login here</a>
+                Already have an account? <a href="/login" style="color: var(--secondary);">Login here</a>
             </div>
         </div>
     </div>

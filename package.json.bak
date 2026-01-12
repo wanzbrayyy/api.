@@ -1,12 +1,11 @@
 {
   "name": "rest-api-party",
   "version": "1.0.0",
-  "type": "module",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "nodemon --exec node --loader ts-node/esm src/server.ts"
+    "dev": "nodemon src/server.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.500.0",

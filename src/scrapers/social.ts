@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import puppeteer from 'puppeteer';
 
 export const stalkGithub = async (username: string) => {
     try {
@@ -43,7 +42,9 @@ export const stalkGenshin = async () => {
 export const searchPinterest = async (query: string) => {
     try {
         const url = `https://www.bing.com/images/search?q=site%3Apinterest.com+${encodeURIComponent(query)}&first=1&count=20`;
-        const { data } = await axios.get(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+        const { data } = await axios.get(url, { 
+            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36' } 
+        });
         const $ = cheerio.load(data);
         const results: any[] = [];
         $('a.iusc').each((i, el) => {
@@ -74,33 +75,24 @@ export const checkIdCh = async (url: string) => {
 };
 
 export const stalkIG = async (username: string) => {
-    let browser = null;
     try {
-        browser = await puppeteer.launch({ 
-            headless: true, 
-            args: ['--no-sandbox', '--disable-setuid-sandbox'] 
+        const { data } = await axios.get(`https://www.instagram.com/${username}/`, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5'
+            }
         });
-        const page = await browser.newPage();
-        await page.goto(`https://www.instagram.com/${username}/`, { waitUntil: 'domcontentloaded' });
+        const $ = cheerio.load(data);
+        const getMeta = (prop: string) => $(`meta[property="${prop}"]`).attr('content');
         
-        const data = await page.evaluate(() => {
-            const getMeta = (prop: string) => {
-                const element = document.querySelector(`meta[property="${prop}"]`);
-                return element ? element.getAttribute('content') : null;
-            };
-            
-            return {
-                title: document.title,
-                description: getMeta('og:description'),
-                image: getMeta('og:image'),
-                url: getMeta('og:url')
-            };
-        });
-
-        await browser.close();
-        return data;
+        return {
+            title: $('title').text(),
+            description: getMeta('og:description'),
+            image: getMeta('og:image'),
+            url: getMeta('og:url')
+        };
     } catch (error) {
-        if (browser) await browser.close();
-        return { error: "Failed to scrape IG" };
+        return { error: "Failed to scrape IG (Protected/Login Page)" };
     }
 };

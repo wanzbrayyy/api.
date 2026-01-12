@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
-import User from "../models/User.js";
+import User from "../models/user.js";
 import { uploadToR2 } from "../services/r2Service.js";
 
 export const getDashboard = async (req: Request, res: Response) => {

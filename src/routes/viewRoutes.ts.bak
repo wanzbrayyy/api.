@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { getLogin, getRegister } from "../controllers/authController.js";
-import { getDashboard, getProfile } from "../controllers/userController.js";
-import { requireAuth, redirectIfAuthenticated } from "../middleware/authMiddleware.js";
+import { getLogin, getRegister } from "../controllers/authController";
+import { getDashboard, getProfile } from "../controllers/userController";
+import { requireAuth, redirectIfAuthenticated } from "../middleware/authMiddleware";
 
 const router = Router();
 
